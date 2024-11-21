@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">RecycleView</string>
     <string-array name="namaWayang">
         <item>Bima</item>
         <item>Arjuna</item>

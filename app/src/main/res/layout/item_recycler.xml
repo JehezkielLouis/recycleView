@@ -14,8 +14,8 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/sample_image" /> <!-- Ganti dengan gambar wayang yang sebenarnya -->
+        android:scaleType="centerCrop"/>
+<!--        android:src="@drawable/sample_image" /> &lt;!&ndash; Ganti dengan gambar wayang yang sebenarnya &ndash;&gt;-->
 
     <!-- TextView for Wayang Name -->
     <TextView
@@ -57,5 +57,15 @@
         app:layout_constraintStart_toEndOf="@id/gambarWayang"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
+
+    <Button
+        android:id="@+id/hapusData"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="HAPUS DATA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/deskripsiWayang" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
