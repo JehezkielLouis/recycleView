@@ -3,6 +3,7 @@ package com.example.recycleview
 import android.app.AlertDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -13,19 +14,24 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var _nama : MutableList<String>
-    private lateinit var _karakter : MutableList<String>
-    private lateinit var _deskripsi : MutableList<String>
-    private lateinit var _gambar : MutableList<String>
+    private  var _nama : MutableList<String> = emptyList<String>().toMutableList()
+    private  var _karakter : MutableList<String> = emptyList<String>().toMutableList()
+    private  var _deskripsi : MutableList<String> = emptyList<String>().toMutableList()
+    private  var _gambar : MutableList<String> = emptyList<String>().toMutableList()
 
     private var arwayang = arrayListOf<wayang>()
 
     private lateinit var _rvWayang : RecyclerView
 
+    lateinit var sp : SharedPreferences
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        sp = getSharedPreferences("dataSP", MODE_PRIVATE)
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
@@ -35,9 +41,26 @@ class MainActivity : AppCompatActivity() {
             insets
         }
 
+        val gson = Gson()
+        val isiSP = sp.getString("spWayang", null)
+        val type = object : TypeToken<ArrayList<wayang>>(){}.type
+        if (isiSP != null)
+            arwayang = gson.fromJson(isiSP, type)
 
         _rvWayang = findViewById<RecyclerView>(R.id.rvWayang)
+        if(arwayang.size == 0){
         SiapkanData()
+        }else{
+            arwayang.forEach{
+                _nama.add(it.nama)
+                _gambar.add(it.foto)
+                _deskripsi.add(it.deskripsi)
+                _karakter.add(it.karakter)
+            }
+            arwayang.clear()
+        }
+
+
         TambahData()
         TampilkanData()
     }
@@ -51,6 +74,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun TambahData(){
+        val gson = Gson()
+        val editor = sp.edit()
         arwayang.clear()
         for(position in _nama.indices){
             val data = wayang(
@@ -61,7 +86,13 @@ class MainActivity : AppCompatActivity() {
             )
             arwayang.add(data)
         }
+        val json = gson.toJson(arwayang)
+        editor.putString("spWayang", json)
+        editor.apply()
     }
+
+
+
     fun TampilkanData(){
         _rvWayang.layoutManager = LinearLayoutManager(this)
 
